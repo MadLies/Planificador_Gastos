@@ -7,13 +7,16 @@ TextInput,
 Pressable,
 Image
 } from 'react-native'
-
+import globalStyles from '../styles';
 
 const NuevoPresupuesto = ( {
+    presupuesto,
+    setPresupuesto,
     handleNuevoPresupuesto
+
 }) => {
 
-  const [presupuesto, setPresupuesto] = useState(0);
+
 
   return (
     <View style={styles.container}>
@@ -42,20 +45,7 @@ const NuevoPresupuesto = ( {
 const styles = StyleSheet.create({
 
     container: {
-        backgroundColor: '#fff',
-        marginHorizontal: 15,
-        borderRadius: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 40,
-        transform: [{translateY: 50}],
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.30,
-        shadowRadius: 4.65,
-        elevation: 8,
+        ...globalStyles.container,
     },
 
     label: {

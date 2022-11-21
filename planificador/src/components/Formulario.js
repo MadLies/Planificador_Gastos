@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {
      StyleSheet, 
      Text, 
@@ -11,27 +11,60 @@ import {Picker} from '@react-native-picker/picker';
 import globalStyles from '../styles';
 const Formulario = ({
     handleNuevoGasto,
-    setModal
+    setModal,
+    setGasto, 
+    gasto,
+    handleEliminarGasto,
 }) => {
 
   const [nombre, setNombre] = useState('');
   const [cantidad, setCantidad] = useState('');
-  const [categoria, setCategoria] = useState('');  
+  const [categoria, setCategoria] = useState(''); 
+  const [id, setId] = useState('');
+  const [fecha, setFecha] = useState('');
+
+  useEffect(() => {
+    if(gasto?.nombre) {
+      setNombre(gasto.nombre);
+      setCantidad(gasto.cantidad);
+      setCategoria(gasto.categoria);
+      setId(gasto.id);
+      setFecha(gasto.fecha);
+    }
+
+  },[gasto])
 
   return (
     <View style={styles.container}>
-        <View >
+        <View style={styles.btnContaine}>
+        
             <Pressable
-                style={styles.btnCancel}
-                onPress={() => setModal(false)}
+                style={[styles.btn, styles.btnCancel]}
+                onPress={() => {
+                    setModal(false)
+                    setGasto({})
+                }}
             >
-                <Text style={styles.btnCancelText}
+                <Text style={styles.btnText}
                 >Cancelar</Text>
             </Pressable>
+            { !!id && (
+                <Pressable
+                    style={[styles.btn, styles.btnDelete]}
+                    onPress={() => { 
+                        handleEliminarGasto(id);
+                    }}
+                >
+                    <Text style={styles.btnText}
+                    >Eliminar</Text>
+                </Pressable>
+            )}
+
         </View>
 
         <View style={styles.form}>
-            <Text style={styles.title}>Nuevo Gasto</Text>
+            
+            <Text style={styles.title}>{gasto?.nombre ? 'Editar Gasto' : 'Nuevo Gasto' } </Text>
 
             <View style={styles.space}>
                 <Text style={styles.label}>Nombre Gasto</Text>
@@ -81,9 +114,9 @@ const Formulario = ({
         
             <Pressable 
                 style={styles.submit}
-                onPress={() => handleNuevoGasto({nombre, cantidad, categoria})}
+                onPress={() => handleNuevoGasto({nombre, cantidad, categoria, id, fecha})}
                 >
-                <Text style={styles.submitText}>Agregar Gasto</Text>
+                <Text style={styles.submitText}>{gasto?.nombre ? 'Guardar Cambios' :'Agregar Gasto'}</Text>
             </Pressable>
 
         </View>
@@ -97,15 +130,31 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    btnCancel: {
-        backgroundColor: '#DB2777',
+    btnContaine: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+
+
+    btn: {
         padding: 10,
         marginTop: 30,
         marginHorizontal: 15,
         borderRadius: 10,
+        flex: 1,
+    },
+
+
+    btnCancel: {
+        backgroundColor: '#DB2777',
+
     }   ,
 
-    btnCancelText: {
+    btnDelete: {
+        backgroundColor: '#EF4444',
+    },
+
+    btnText: {
         color: '#fff',
         fontWeight: 'bold',
         textAlign: 'center',

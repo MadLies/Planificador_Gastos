@@ -21,7 +21,6 @@ const NuevoPresupuesto = ( {
   return (
     <View style={styles.container}>
         <Text style={styles.label}>Definir Presupuesto</Text>
-
         <TextInput
             style={styles.input}
             keyboardType='numeric'

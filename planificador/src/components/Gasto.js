@@ -12,28 +12,37 @@ const iconos = {
     suscripciones: require('../img/icono_suscripciones.png'),
     ocio: require('../img/icono_ocio.png'),
 }
-const Gasto = ({gasto}) => {
+const Gasto = ({gasto, setModal, setGasto}) => {
   const {cantidad, categoria, nombre, fecha} = gasto;
+  const handleAcciones = () => {
+    setModal(true);
+    setGasto(gasto);  
+
+}
+
   return (
-    <View style={styles.container}>
-        <View style={styles.info}>
-            <View style={styles.imageContainer}>
-            <Image
-                style={styles.image}
-                source={iconos[categoria]}
-             />   
-                
-                <View style={styles.infoContainer}> 
-                        
-                        <Text style={styles.categoria}>{categoria}</Text>
-                        <Text style={styles.nombre}>{nombre}</Text>
-                        <Text style={styles.label}>{formatearCantidad(cantidad)}</Text>
-                        <Text style={styles.fecha}>{formatearFecha(fecha)}</Text>
+    <Pressable 
+     onPress={handleAcciones}>
+        <View style={styles.container}>
+            <View style={styles.info}>
+                <View style={styles.imageContainer}>
+                <Image
+                    style={styles.image}
+                    source={iconos[categoria]}
+                />   
+                    
+                    <View style={styles.infoContainer}> 
+                            
+                            <Text style={styles.categoria}>{categoria}</Text>
+                            <Text style={styles.nombre}>{nombre}</Text>
+                            <Text style={styles.label}>{formatearCantidad(cantidad)}</Text>
+                            <Text style={styles.fecha}>{formatearFecha(fecha)}</Text>
+                    </View>
                 </View>
+                
             </View>
-            
         </View>
-    </View>
+    </Pressable>
   )
 }
 const styles = StyleSheet.create({

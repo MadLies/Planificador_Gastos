@@ -22,12 +22,17 @@ import Control from './src/components/Control';
 import Formulario from './src/components/Formulario';
 import { generarId } from './src/helper';
 import ListadoGastos from './src/components/ListadoGastos';
+import Filtro from './src/components/Filtro';
+
 const App = () => {
 
   const [isValidate, setIsValidate] = useState(false);
   const [presupuesto, setPresupuesto] = useState(0);
   const [gastos, setGastos] = useState([]);
   const [modal, setModal] = useState(false);
+  const [gasto, setGasto] = useState({});
+  const [filtro, setFiltro] = useState('');
+  const [gastosFiltrados, setGastosFiltrados] = useState([]);
 
 
   const handleNuevoPresupuesto = (presupuesto) => {
@@ -40,15 +45,45 @@ const App = () => {
   }
 
   const handleNuevoGasto = (gasto) => {
-    if (Object.values(gasto).includes('')) {
+    if ([gasto.nombre, gasto.categoria, gasto.cantidad].includes('')) {
       Alert.alert('Error', 'Todos los campos son obligatorios');
       return;
     }
-    gasto.id = generarId();
-    gasto.fecha = Date.now();
-    setGastos([...gastos, gasto]);
-    setModal(!modal);
 
+    if (gasto.id){
+      const gastosActualizados = gastos.map(g => g.id === gasto.id ? gasto : g);
+      setGastos(gastosActualizados);
+    }
+    else{
+        gasto.id = generarId();
+        gasto.fecha = Date.now();
+        setGastos([...gastos, gasto]);
+
+    }
+        setModal(!modal);
+    }
+
+    const handleEliminarGasto = (id) => {
+      if (id === ''){
+        Alert.alert('Error', 'No se puede eliminar el gasto');
+      }
+      else{
+        Alert.alert(
+          '¿Desea eliminar el gasto?',
+          'El gasto se eliminará permanentemente',
+          [
+            { text: 'No', style: 'cancel' },
+            { text: 'Si, Eliminar', onPress: () => {
+              
+              const gastosActualizados = gastos.filter(g => g.id !== id);
+              setGastos(gastosActualizados);
+              setModal(!modal);
+              setGasto({});
+            
+            }},
+          ]
+        );
+      }
     }
   
 
@@ -73,10 +108,28 @@ const App = () => {
           )}
          
         </View>
+        
+        
+
         {isValidate && (
+          <>
+          <Filtro 
+            filtro={filtro}
+            setFiltro={setFiltro}
+            gastos={gastos}
+            setGastosFiltrados={setGastosFiltrados}
+          />
+
+
           <ListadoGastos
             gastos={gastos}
-            />       
+            setModal={setModal}
+            setGasto={setGasto}
+            filtro={filtro}
+            gastosFiltrados={gastosFiltrados}
+            />  
+
+          </>       
         )}
       </ScrollView>
       {modal && (
@@ -89,6 +142,9 @@ const App = () => {
           <Formulario
             handleNuevoGasto={handleNuevoGasto}
             setModal={setModal}
+            setGasto={setGasto}
+            gasto={gasto}
+            handleEliminarGasto={handleEliminarGasto}
 
           />
 
@@ -99,7 +155,9 @@ const App = () => {
 
       {isValidate && (
         <Pressable
+          style={styles.btn}
           onPress={() => setModal(!modal)}
+
         >
           <Image source={require('./src/img/nuevo-gasto.png')} style={styles.imagebtn}/>
         </Pressable>
@@ -141,12 +199,19 @@ const styles = StyleSheet.create({
     zIndex: -1,
     
   },
-  imagebtn: {
+  btn: {
+    
     width: 60,
     height: 60,
     position: 'absolute',
     bottom: 20,
     right: 30,
+
+  },
+  imagebtn: {
+    width: 60,
+    height: 60,
+
   },
 });
 

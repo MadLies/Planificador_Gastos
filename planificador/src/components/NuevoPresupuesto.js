@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { 
 StyleSheet, 
 Text, 
@@ -15,7 +15,12 @@ const NuevoPresupuesto = ( {
     handleNuevoPresupuesto
 
 }) => {
-
+  useEffect(() => {
+    const obtenerAS  = async () => {
+        const valor = await AsyncStorage.getItem('presupuesto');
+    }
+    obtenerAS();
+},[])
 
 
   return (

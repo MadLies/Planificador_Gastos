@@ -14,6 +14,7 @@ const Control = (
     {
         presupuesto,
         gastos,
+        resetApp
     }
 ) => {
   const [disponible, setDisponible] = useState(0);
@@ -50,6 +51,13 @@ const Control = (
 
           </View>
           <View style={styles.presupuesto}>
+
+              <Pressable
+                   style={styles.reset}
+                   onPress={resetApp}
+                   >
+                  <Text style={styles.resetText}>Reiniciar App</Text>
+              </Pressable>
               <Text style={styles.valor}>
                 <Text style={styles.label}>Presupuesto: </Text>
                      {formatearCantidad(presupuesto)}
@@ -79,9 +87,19 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
 
-    image: {  
-      width: 250,
-      height: 250,
+    reset: {
+      backgroundColor: '#DB2777',
+      padding: 10,
+      borderRadius: 10,
+      marginVertical: 30,
+    },
+
+    resetText: {
+      color: '#fff',
+      fontSize: 18,
+      fontWeight: 'bold',
+      textTransform: 'uppercase',
+      textAlign: 'center',
     },
     
     presupuesto: {
